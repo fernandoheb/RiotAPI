@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Riot Api Module | Chris Cates</title>
+		<meta name="viewport" content="width=device-width, minimal-ui">
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<div class="container">
+			<div class="title">
+				<center>
+					<img src="img/league_logo.png" class="titleImg"/>
+				</center>
+				<h1>Riot API Module</h1>
+				<p style="text-indent: 2.5%;">
+					
+				</p>
+				
+				<center>
+					<a target="_blank" href="https://github.com/Chris-Cates/RiotApi">
+						<img src="img/Github.png"/><h2>Github.com/Chris-Cates/RiotApi</h2>
+					</a>
+				</center>
+			</div>
+			<div class="content">
+				<h2>This Riot API Module is based on the Riot cURL API.</h2>
+				<p>Extensible as a jQuery Plugin, this module allows you
+				to get statistics from League of Legends accounts quickly without having to deal with cURL or JSON.</p>
+				<h2>Fully Documented. You can literally copy and paste the examples and then get the information you need.</h2>
+<pre class="1">
+&#60;script type="text/javascript" src="jquery.js"&#62;&#60;/script&#62;
+&#60;script type="text/javascript" src="riotapimodule.js"&#62;&#60;/script&#62;
+</pre>	
+				<h3 style="text-align: center;">Download it here:
+				<a href="riotapimodule.js">riotapimodule.js</a>
+				</h3>
+				
+				
+<h2>Setup:</h2>
+<pre class="2">
+//First set your key and region.
+var key = "6cddf684-4aa8-46ae-8e70-84a7b1ebeb8b";
+var region = "na";
+//Add it to the riotAPI object.
+riotAPI.key = key;
+riotAPI.region = region;
+</pre>
+<h2>Making a calls:</h2>
+<p>Most calls are dependent on you having the user's summoner ID.</p>
+<p>But first, you need to get that ID:</p>
+<pre class="2">
+riotAPI.getSummoner("AKA Uncle Ruckus", function(data) {
+	summonerId = data["id"];
+	name = data["name"];
+	summonerLevel = data["summonerLevel"];
+	//Other additional data:
+	data['profileIconId'];
+	data['revisionDate'];
+	/*
+		You can also use riotAPI.getSummonerId(); instead.
+		However, you will need the user's summoner id not their name.
+	*/
+});
+</pre>		
+<p>The getSummoner function gets the user's basic data.</p>
+<h2>RiotAPIModule Reference:</h2>
+<p>Click to expand any module reference:</p>
+<h3 class="btnTogglePre" i="1">riotAPI.getMasteries(summonerId,function(masteries)) </h3>
+<pre class="2 preHide" i="1">
+riotAPI.getMasteries(id,function(masteries) {
+	var pageIndex = 0; //Zero being the first page in the summoners masteries.
+	//The first array [pageIndex] indicates the page #.
+	var allMasteries = masteries[pageIndex]; 
+	//The page's name.
+	var pageName = masteries[pageIndex]['name']; 
+	//Whether or not this is currently selected mastery page.
+	var current = masteries[pageIndex]['current'];
+	//The array which holds all the talents.	
+	var talents = masteries[pageIndex]['talents']; 
+	//The block mastery
+	var block = talents['Block']; //Indicated as a # for how many points in it.
+	if (!block) {
+		block = 0; //This means there is no block mastery points in this page.
+	}
+});
+<div>
+
+</div>
+</pre>
+
+<h3 class="btnTogglePre" i="2">riotAPI.getRunes(id,function(runes))</h3>
+<pre class="2 preHide" i="2">
+var pageIndex = 0; //Indicates which page we want to select.
+var firstRunePage = runes[pageIndex];
+//The rune page's name
+var pageName = runes[pageIndex]['name'];
+//Is it the users selected page?
+var current = runes[pageIndex]['current'];
+//The rune types in each slot:
+var runes = runes[pageIndex]['slots'];
+/*From 0-29, you can get all 30 runes by their # index:
+	0-8 = Marks (Reds)
+	9-17 = Seals (yellows)
+	18-26 = Glyphs (blues)
+	27-29 = Quintessences (the big ones)
+*/
+//Zero being the first rune
+//This is the rune's name: (eg: Mark of Ability Power)
+var runeName = runes[0]['rune']['name'];
+//It's bonus: (eg: +0.59 Ability Power)
+var runeDesc = runes[0]['rune']['description'];
+//It's tier: (1-3)
+var runeTier = runes[0]['rune']['tier'];
+//It's ID:
+var runeId = runes[0]['rune']['id'];	
+</pre>	
+
+<h3 class="btnTogglePre" i="3">riotAPI.getTeamBySummoner(id,function(team))</h3>
+<pre class="2 preHide" i="3">					
+	riotAPI.getTeamBySummoner(id,function(team) {
+		console.log(team);
+		var teamIndex = 0; //From 0-4 indicates which team you joined first to the last.
+		var yourTeam = team[teamIndex];
+		//The ID you can use to pull up the information via getTeamById();
+		var teamId = yourTeam['fullId'];
+		//The team's name
+		var teamName = yourTeam['name'];
+		//The tag that is displayed in game
+		var teamTag = yourTeam['tag'];
+		//Status, whether or not they have completed the placement matches:
+		var teamStatus = yourTeam['status'];
+		//Team Stats, that's displayed in the teamStatDetails
+		var teamStats = yourTeam['teamStatSummary'];
+		//Team Stats types for 3x3 and 5x5
+		//0 being 5x5 1 being 3x3
+		var teamStats5 = teamStats[0]['wins'];
+		//['losses'],['averageGamesPlayed'] are additional values in the teamStats array.
+		//The team roster
+		var teamRoster = yourTeam['roster'];
+		//Grabbing the member's id:
+		//This is the first player's summoner ID. Which you can use to pull up their info.
+		var player = teamRoster[0]['playerId'];
+		//['inviteDate'],['joinDate'] other values in the teamRoster array.
+		//Match History
+		var matchHistory = yourTeam['matchHistory'];
+		var latestMatch = matchHistory[0]; //The latest match in the teams match history.
+		var matchWin = latestMatch['win']; //True or false
+		var matchId = latestMatch['gameId']; //To get full details
+		/*
+			Other match history data
+			latestMatch['assists']
+			latestMatch['deaths']
+			latestMatch['opposingTeamName']
+			latestMatch['opposingTeamKills']
+		*/					
+	});
+</pre>
+		
+				<div style="margin: 10%;"></div>
+				<h2>Any questions are comments feel free to ask me via email at codeviolet@chriscates.ca</h2>
+				<h2>I haven't finished the reference... Busy with other things. Feel free to contribute to the github fork.
+				Thanks a lot!</h2>
+			</div>
+		</div>
+
+		<link rel="stylesheet" href="css/index.css"/>
+		<link rel="stylesheet" type="text/css" href="css/sh.css"/>
+		<script type="text/javascript" src="js/jquery.110.js"></script>
+		<script type="text/javascript" src="js/jquery.transit.js"></script>
+		<script type="text/javascript" src="js/jquery.fitput.min.js"></script>
+		<script type="text/javascript" src="js/jquery.snippet.min.js"></script>
+		<script type="text/javascript" src="riotapimodule.js"></script>
+ 		<script type="text/javascript">
+		$(document).ready(function() {
+			$('.title h1').fitPut(1.25);
+			$('.title h2').fitPut(3);
+			$('.title h3').fitPut(3);
+			$('.title p').fitPut(4);
+			$('.content h2').fitPut(3);
+			$('.content h3').fitPut(4);
+			$('.content h4').fitPut(3.5);
+			$('.content p').fitPut(4);
+			
+			$('pre').fitPut(5);
+			$("pre.1").snippet("html", {style:'acid'});
+			$("pre.2").snippet("javascript", {style:'print'});
+			$('.preHide').hide();
+			$('.btnTogglePre').click(function() {
+				var index = $(this).attr('i');
+				$('.preHide[i='+index+']').toggle();
+			});
+			riotAPI.getSummoner("AKA Uncle Ruckus", function(data) {
+				id = data["id"];
+				name = data["name"];
+				summonerLevel = data["summonerLevel"];
+				var key = "6cddf684-4aa8-46ae-8e70-84a7b1ebeb8b";
+				var region = "na";
+				riotAPI.key = key;
+				riotAPI.region = region;			
+			});
+			
+		});
+		
+
+		</script>
+	</body>
+</html>

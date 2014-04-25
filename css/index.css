@@ -1,0 +1,52 @@
+@font-face {
+font-family: comfort;
+src: url('comfort.ttf');
+}
+
+body {
+	background: #A18F68;
+	color: black;
+	font-family: comfort;
+}
+
+.container {
+	position: absolute;
+	top: 0px; left: 0px;
+	width: 100%;
+}
+
+.title {
+	background: #07307F;
+	padding: 2.5%;
+	text-align :center;
+}
+.title .titleImg {
+	width: 33%;
+	min-width: 300px;
+}
+
+.title h1 {
+	margin: 0;
+}
+.title h2 {
+	display: inline;
+	margin: 0;
+	padding-bottom: 2.5%;
+}
+.title a {
+	color: white;
+}
+.title a img {
+	padding: 0% 2.5%;
+	width: 5%;
+	position: relative;
+}
+
+.content {
+	padding: 2.5%;
+}
+
+.btnTogglePre {
+	cursor: pointer;
+	text-indent: 5%;
+}
